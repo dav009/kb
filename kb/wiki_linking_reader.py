@@ -77,48 +77,19 @@ class LinkingReader(DatasetReader):
 
         self.extra_candidate_generators = extra_candidate_generators
 
-    def _read(self, file_path: str):
+        
+    def _read(self, text: str):
 
-        file_path = cached_path(file_path)
+        #file_path = cached_path(file_path)
         words = []
         gold_spans = []
         gold_entities = []
         in_mention = False
         doc_id = None
-        with open(file_path) as input_file:
-            for line in input_file:
-                line = line.rstrip()
-                if line in self.separator and not in_mention:
-                    if line == ".":
-                        words.append(line)
-                    # if we have continuous *NL* *NL* do not return empty chunks
-                    if len(words) > 0:
-                        processed = self.mention_generator.get_mentions_with_gold(" ".join(words), gold_spans,
-                                                                                  gold_entities, whitespace_tokenize=True, keep_gold_only=self.entity_disambiguation_only)
-                        if processed["candidate_spans"]:
-                            yield self.text_to_instance(doc_id=doc_id, **processed)
-                    # Reset state
-                    words = []
-                    gold_spans = []
-                    gold_entities = []
-
-                elif line.startswith('MMSTART_'):
-                    in_mention = True
-                    _, name = line.split("\t")
-                    name = name.strip()
-                    gold_entities.append(name)
-                    gold_spans.append([len(words)])
-                elif line == 'MMEND':
-                    in_mention = False
-                    # Spans are inclusive in allennlp
-                    gold_spans[-1].append(len(words) - 1)
-                elif line.startswith('DOCSTART_'):
-                    # ignore doc indicators
-                    doc_id = line.strip()
-                elif line.startswith('DOCEND'):
-                    doc_id = None
-                else:
-                    words.append(line)
+        print("salida")
+        print(text)
+        words = text.split(" ")
+        print(words)
         if words:
             processed = self.mention_generator.get_mentions_with_gold(" ".join(words), gold_spans,
                                                                       gold_entities, whitespace_tokenize=True, keep_gold_only=self.entity_disambiguation_only)
@@ -133,7 +104,7 @@ class LinkingReader(DatasetReader):
                          gold_entities: List[str] = None,
                          doc_id: str = None):
 
-        assert doc_id is not None
+        #assert doc_id is not None
 
         token_field = TextField([Token(x) for x in tokenized_text], self.token_indexers)
         span_fields = ListField([SpanField(*span, token_field) for span in candidate_spans])
@@ -166,7 +137,7 @@ class LinkingReader(DatasetReader):
                                token_indexers=self.entity_indexer)
             fields["gold_entities"] = labels
 
-        fields["doc_id"] = MetadataField(doc_id)
+        #fields["doc_id"] = MetadataField(doc_id)
 
         if self.extra_candidate_generators:
             tokens = " ".join(tokenized_text)

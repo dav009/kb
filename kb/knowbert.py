@@ -881,6 +881,8 @@ class KnowBert(BertPretrainedMetricsLoss):
     def forward(self, tokens=None, segment_ids=None, candidates=None,
                 lm_label_ids=None, next_sentence_label=None, **kwargs):
 
+        print(self.soldered_kgs)
+        print(self.soldered_kgs.keys())
         assert candidates.keys() == self.soldered_kgs.keys()
 
         mask = tokens['tokens'] > 0

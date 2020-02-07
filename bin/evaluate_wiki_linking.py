@@ -33,7 +33,7 @@ def run_evaluation(evaluation_file,
     vocab = Vocabulary.from_params(params.pop('vocabulary'))
 
     model = archive.model
-    model.cuda()
+    #model.cuda()
     model.eval()
 
     if is_wordnet_and_wiki:
@@ -125,7 +125,7 @@ def run_evaluation(evaluation_file,
     instances = reader.read(evaluation_file)
 
     for batch_no, batch in enumerate(iterator(instances, shuffle=False, num_epochs=1)):
-        b = move_to_device(batch, 0)
+        b = move_to_device(batch, -1)
 
         b['candidates'] = {'wiki': {
                 'candidate_entities': b.pop('candidate_entities'),
@@ -151,7 +151,7 @@ def run_evaluation(evaluation_file,
             padding_lengths = eb.get_padding_lengths()
             tensor_dict = eb.as_tensor_dict(padding_lengths)
             b['candidates'].update(tensor_dict['candidates'])
-            bb = move_to_device(b, 0)
+            bb = move_to_device(b, -1)
         else:
             bb = b
 

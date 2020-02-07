@@ -255,8 +255,7 @@ class EntityLinkingBase(Model):
                     batch_indices.tolist()
         ):
             entity_id = eid.item()
-            if entity_id != self.null_entity_id:
-                ret.append((batch_index, tuple(start_end), entity_id))
+            ret.append((batch_index, tuple(start_end), entity_id))
 
         return ret
 

@@ -161,6 +161,7 @@ class TestEntityLinkingWithCandidateMentions(unittest.TestCase):
             gold_entities=batch['gold_entities']['wordnet'],
             **batch['candidates']['wordnet'])
 
+        print(output.keys())
         self.assertTrue('loss' in output)
 
 

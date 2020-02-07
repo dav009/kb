@@ -141,7 +141,7 @@ To reproduce the results in Table 3 for KnowBert-W+W:
 ```
 # or aida_test.txt
 EVALUATION_FILE=aida_dev.txt
-MODEL_ARCHIVE=..location of model
+MODEL_ARCHIVE=knowbert_wiki_model.tar.gz
 
 curl https://allennlp.s3-us-west-2.amazonaws.com/knowbert/wiki_entity_linking/$EVALUATION_FILE > $EVALUATION_FILE
 
